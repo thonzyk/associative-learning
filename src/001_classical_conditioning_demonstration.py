@@ -1,4 +1,4 @@
-from modules.model import get_binary_perceptron
+from modules.model_001 import get_binary_perceptron
 import numpy as np
 from matplotlib import pyplot as plt
 import matplotlib
