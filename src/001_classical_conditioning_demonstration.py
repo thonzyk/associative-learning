@@ -9,7 +9,7 @@ import pandas as pd
 
 matplotlib.use('Qt5Agg')
 
-EPOCHS = 30
+EPOCHS = 150
 REPEATS = 1000
 
 
@@ -135,10 +135,99 @@ def run_experiment(ratio):
     data_output.to_csv(f'results/classic_cond_ratio-{ratio}.tsv', sep='\t', index=False)
 
 
+def plot_ratio():
+    data_01 = pd.read_csv('results/classic_cond_ratio-1.0.tsv', delimiter='\t')
+    data_05 = pd.read_csv('results/classic_cond_ratio-5.0.tsv', delimiter='\t')
+    data_25 = pd.read_csv('results/classic_cond_ratio-25.0.tsv', delimiter='\t')
+
+    # Weights
+    plt.figure()
+    plt.plot(data_01['weight_A'])
+    plt.plot(data_01['weight_B'], linestyle='--')
+    plt.plot(data_05['weight_A'])
+    plt.plot(data_05['weight_B'], linestyle='--')
+    plt.plot(data_25['weight_A'])
+    plt.plot(data_25['weight_B'], linestyle='--')
+
+    plt.legend(['weight A (1:1)', 'weight B (1:1)', 'weight A (1:5)', 'weight B (1:5)', 'weight A (1:25)',
+                'weight B (1:25)'])
+    plt.title('Stimuli weight development')
+    plt.xlabel('Epoch')
+    plt.ylabel('Weight value')
+
+    # Biases
+    plt.figure()
+    plt.plot(data_01['bias'])
+    plt.plot(data_05['bias'])
+    plt.plot(data_25['bias'])
+    plt.legend(['(1:1)', '(1:5)', '(1:25)'])
+    plt.xlabel('Epoch')
+    plt.ylabel('Bias value')
+    plt.title('Bias (threshold) development')
+
+    # Predictions [1, 1]
+    plt.figure()
+    plt.plot(data_01['pred_11'])
+    plt.plot(data_05['pred_11'])
+    plt.plot(data_25['pred_11'])
+    plt.hlines(1, 0, 30, linestyle='--', color='tab:red')
+    plt.grid()
+    plt.legend(['(1:1)', '(1:5)', '(1:25)', 'correct answer'])
+    plt.xlabel('Epoch')
+    plt.ylabel('Predicted value')
+    plt.title('Prediction development on input [1, 1]')
+
+    # Predictions [1, 0]
+    plt.figure()
+    plt.plot(data_01['pred_10'])
+    plt.plot(data_05['pred_10'])
+    plt.plot(data_25['pred_10'])
+    plt.hlines(1, 0, 30, linestyle='--', color='tab:red')
+    plt.grid()
+    plt.legend(['(1:1)', '(1:5)', '(1:25)', 'correct answer'])
+    plt.xlabel('Epoch')
+    plt.ylabel('Predicted value')
+    plt.title('Prediction development on input [1, 0]')
+
+    # Predictions [0, 1]
+    plt.figure()
+    plt.plot(data_01['pred_01'])
+    plt.plot(data_05['pred_01'])
+    plt.plot(data_25['pred_01'])
+    plt.hlines(0, 0, 30, linestyle='--', color='tab:red')
+    plt.grid()
+    plt.legend(['(1:1)', '(1:5)', '(1:25)', 'correct answer'])
+    plt.xlabel('Epoch')
+    plt.ylabel('Predicted value')
+    plt.title('Prediction development on input [0, 1]')
+
+    # Predictions [0, 0]
+    plt.figure()
+    plt.plot(data_01['pred_00'])
+    plt.plot(data_05['pred_00'])
+    plt.plot(data_25['pred_00'])
+    plt.hlines(0, 0, 30, linestyle='--', color='tab:red')
+    plt.grid()
+    plt.legend(['(1:1)', '(1:5)', '(1:25)', 'correct answer'])
+    plt.xlabel('Epoch')
+    plt.ylabel('Predicted value')
+    plt.title('Prediction development on input [0, 0]')
+
+    plt.show()
+
+
+# region <RUN>
+
 def run():
     for ratio in [1.0, 5.0, 25.0]:
         run_experiment(ratio)
 
+
+def plot_results():
+    plot_ratio()
+
+
+# endregion
 
 if __name__ == '__main__':
     run()
