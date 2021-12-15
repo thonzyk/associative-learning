@@ -9,7 +9,7 @@ import pandas as pd
 
 matplotlib.use('Qt5Agg')
 
-EPOCHS = 150
+EPOCHS = 30
 REPEATS = 1000
 
 
@@ -93,7 +93,7 @@ def run_experiment(ratio):
                 x_train, y_train,
                 validation_data=(x_test, y_test),
                 epochs=1,
-                batch_size=1,
+                batch_size=2,
                 shuffle=True,
                 verbose=0,
                 class_weight={0: 1.0 / ratio, 1: 1.0}
@@ -230,4 +230,4 @@ def plot_results():
 # endregion
 
 if __name__ == '__main__':
-    run()
+    plot_results()
