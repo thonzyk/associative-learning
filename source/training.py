@@ -74,9 +74,5 @@ def classical_conditioning_experiment(noise=0.0):
     plt.show()
 
 
-def run():
-    pass
-
-
 if __name__ == '__main__':
     classical_conditioning_experiment()
