@@ -2,6 +2,9 @@ from models import Perceptron
 from datasets import create_data
 from matplotlib import pyplot as plt
 import numpy as np
+import matplotlib
+
+matplotlib.use('Qt5Agg')
 
 REPS = 10
 EPOCHS = 100
@@ -17,10 +20,11 @@ def classical_conditioning_experiment(noise=0.0):
 
     def run_train(x, y):
         for epoch in range(EPOCHS):
-            weights_history.append(perc.get_w())
-            bias_history.append(perc.get_b())
-            for i in range(x_test.shape[0]):
-                pred_history[i].append(perc.predict(x_test[i, :][:, None]))
+            if epoch > 3:
+                weights_history.append(perc.get_w())
+                bias_history.append(perc.get_b())
+                for i in range(x_test.shape[0]):
+                    pred_history[i].append(perc.predict(x_test[i, :][:, None]))
 
             for i in range(x.shape[0]):
                 if np.random.rand() < noise:
@@ -33,17 +37,18 @@ def classical_conditioning_experiment(noise=0.0):
     # Recovery
     run_train(x_test, y_test)
     # Pairing 2
+    perc.update_lr(1e2)
     run_train(x_train, y_train)
 
     plt.figure()
     for i in range(x_test.shape[0]):
         if i % 2 == 0:
-            plt.plot(pred_history[i], linestyle='--')
+            plt.plot(pred_history[i])
         else:
             plt.plot(pred_history[i])
 
     plt.vlines([(i + 1) * EPOCHS for i in range(2)], 0, 1, linestyle=':', color='black')
-    plt.legend(['Input 1 1', 'Input 1 0', 'Input 0 1', 'Input 0 0', 'Time of change'])
+    plt.legend(['Input 1 1', 'Input 0 1', 'Input 0 0', 'Time of change'])
     plt.grid()
     plt.xlabel('Epoch')
     plt.ylabel('Prediction')

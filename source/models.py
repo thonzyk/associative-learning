@@ -27,10 +27,13 @@ def Q(x, w, b):
 
 
 class Perceptron(object):
-    def __init__(self, num_of_inputs, learning_rate, w_mean=0.0, w_std=0.0, b_mean=0.0, b_std=0.0):
+    def __init__(self, num_of_inputs, learning_rate):
         self.num_of_inputs = num_of_inputs
-        self.w = np.random.normal(w_mean, w_std, num_of_inputs)
-        self.b = np.random.normal(b_mean, b_std, 1)
+        self.w = np.array([2.0, 10.0], dtype='float64')
+        self.b = np.array([-20.0])
+
+        # self.w = np.array([10.0, -10.0], dtype='float64')
+        # self.b = np.array([-0.0])
         self.learning_rate = learning_rate
 
     def reset(self):
@@ -63,6 +66,9 @@ class Perceptron(object):
 
     def get_b(self):
         return self.b.copy()
+
+    def update_lr(self, lr):
+        self.learning_rate = lr
 
 
 def run_tst():
